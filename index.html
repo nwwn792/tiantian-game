@@ -324,11 +324,27 @@ h1.title{
 .role-tab:hover{transform:translateY(-2px)}
 .role-tab.on{background:linear-gradient(135deg,#ff8fc8,#ff6ba9);color:#fff;box-shadow:0 3px 0 #e34a87}
 .effect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;max-height:292px;overflow-y:auto;padding:2px}
+.role-summary{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:2px auto 6px;padding:0 2px}
+.rs-item{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:800;color:#7a4a5a;background:#fff7fb;border:1.5px solid #ffd9e8;border-radius:999px;padding:4px 9px;cursor:pointer;white-space:nowrap;transition:transform .15s;touch-action:manipulation}
+.rs-item:active{transform:scale(.93)}
+.rs-item i{font-style:normal;color:#b98aa6}
+.rs-item b{color:#ff6ba9;font-family:var(--font-num)}
+.role-tab b{color:#ff6ba9;font-family:var(--font-num);font-size:11px}
+.new-dot{position:absolute;top:3px;right:3px;background:linear-gradient(135deg,#ff6ba9,#ff3d7a);color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:999px;box-shadow:0 2px 5px rgba(255,61,122,.4);z-index:5;line-height:1.4}
+.effect-item.q2,.role-item.q2{border-color:#c49bf0;box-shadow:0 0 0 2px rgba(196,155,240,.35)}
+.effect-item.q3,.role-item.q3{border-color:#ffd23f;box-shadow:0 0 0 2px rgba(255,210,63,.45),0 3px 10px rgba(255,170,60,.22)}
+.effect-item.cur,.role-item.cur{border-color:#ffd23f!important;box-shadow:0 0 0 2.5px rgba(255,210,63,.55)!important}
+.effect-item.cur::after,.role-item.cur::after{content:'✓';position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff9e3d);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(255,170,60,.5);z-index:4}
+.fx-badge{animation:fxFloat 2.4s ease-in-out infinite}
+@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media (max-width:767px){.rs-item{font-size:10px;padding:3px 7px}.new-dot{font-size:8px;padding:0 4px}}
 .effect-item{position:relative;border-radius:18px;padding:10px 4px 8px;background:#fff7fb;border:2px solid #ffe3ef;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .effect-item:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(255,107,169,.25)}
 .effect-item.cur{border-color:#ff8fc8;box-shadow:0 0 0 3px #ffd7e8}
 .effect-item.locked{opacity:.72;cursor:not-allowed}
 .effect-img{width:64px;height:70px;margin:0 auto 6px;border-radius:12px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 2px rgba(255,107,169,.2)}
+.effect-img.skin-img{height:96px;display:flex;align-items:center;justify-content:center}
+.effect-img.skin-img svg{width:100%;height:100%}
 .effect-img img{width:100%;height:100%;object-fit:cover;display:block}
 .effect-img svg{width:100%;height:100%;display:block}
 .effect-name{font-size:12px;color:var(--ink-soft);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -432,6 +448,9 @@ h1.title{
 .energy-track{width:64px;height:10px;border-radius:999px;background:#ffe3ef;overflow:hidden;flex:none}
 .energy-fill{height:100%;border-radius:999px;background:linear-gradient(135deg,#ff9e63,#ff6b3d);width:100%;transition:width .3s}
 .energy-num{font-size:12px;font-weight:800;color:#7a4a5a;font-family:var(--font-num);min-width:30px;text-align:right}
+.energy-plus{width:18px;height:18px;border-radius:50%;border:0;background:linear-gradient(135deg,#ffd23f,#ff9e3d);color:#fff;font-size:13px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 2px 5px rgba(255,170,60,.45);flex:none;padding:0}
+.energy-plus:active{transform:scale(.9)}
+.energy-tip{font-size:9px;color:#c0859a;font-weight:700;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .age-badge{font-size:26px;line-height:1;padding:7px 11px 8px;border-radius:12px;background:linear-gradient(135deg,#7edbc0,#4fc6a8);box-shadow:0 3px 10px rgba(79,198,168,.4),inset 0 0 0 2px rgba(255,255,255,.4);color:#fff;user-select:none;-webkit-user-select:none}
 .age-num{font-size:1em;font-weight:900;font-family:var(--font-num)}
 .age-plus{font-size:.25em;font-weight:900;vertical-align:super;margin-left:1px}
@@ -506,6 +525,12 @@ h1.title{
 .sp-inner.sp-happy .sp-eyes-h,.sp-inner.sp-happy .sp-mouth-o{display:block}
 .sp-inner.sp-sad .sp-eyes,.sp-inner.sp-sad .sp-mouth{display:none}
 .sp-inner.sp-sad .sp-eyes-s,.sp-inner.sp-sad .sp-mouth-s{display:block}
+.sp-fig{width:100%;height:100%}
+.sp-fx{position:absolute;right:-6px;top:-8px;width:26px;height:26px;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(255,107,169,.4),0 0 0 2px #fff;animation:fxFloat 2.4s ease-in-out infinite}
+.sp-fx svg{width:100%;height:100%;display:block}
+#roleIcon,.progress-role{position:relative}
+.mini-fx{position:absolute;right:-4px;top:-4px;width:16px;height:16px;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 0 0 2px #fff,0 1px 4px rgba(255,107,169,.4)}
+#roleIcon .mini-fx svg,.progress-role .mini-fx svg{width:100%;height:100%;display:block}
 .quiz-card{width:min(92vw,380px)}
 .quiz-body{display:flex;gap:12px;align-items:center;text-align:left;margin:8px 0}
 .quiz-role{width:86px;height:100px;flex-shrink:0;background:linear-gradient(160deg,#fff7fb,#f3eeff);border-radius:16px;box-shadow:inset 0 0 0 2px #ffe3ef;padding:6px}
@@ -568,6 +593,8 @@ h1.title{
   display:none;align-items:center;justify-content:center;padding:20px;
 }
 .modal-backdrop.show{display:flex}
+/* 锁定弹窗（VIP5/6 暂不可解锁）必须盖在充值弹窗之上 */
+#vipLockModal{z-index:80}
 .modal-card{
   background:#fff;border-radius:28px;padding:24px 26px;width:min(88vw,340px);
   text-align:center;box-shadow:0 14px 40px rgba(107,74,94,.3);
@@ -654,7 +681,7 @@ h1.title{
 .vip-tier{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-radius:16px;border:2.5px solid #ffe0ee;background:linear-gradient(160deg,#fff6fb,#f3eeff);cursor:pointer;font-family:var(--font-title);color:var(--ink);transition:transform .15s}
 .vip-tier:active{transform:scale(.96)}
 .vip-tier.owned{border-color:#ffd23f;background:linear-gradient(160deg,#fff7dd,#ffe9f2)}
-.vip-tier.cur-tier{border-color:#ff6ba9;box-shadow:0 0 0 3px rgba(255,107,169,.25)} .vip-tier.coming{opacity:.5;border-style:dashed;cursor:not-allowed;filter:grayscale(.3)} .vip-tier.coming:active{transform:none}
+.vip-tier.cur-tier{border-color:#ff6ba9;box-shadow:0 0 0 3px rgba(255,107,169,.25)} .vip-tier.coming{cursor:pointer} .vip-tier.coming:active{transform:scale(.96)}
 .vip-tier b{font-size:17px;color:var(--pink-deep)}
 .vip-tier .vt-price{font-size:14px;font-weight:800;color:#ff9e63}
 .vip-tier small{font-size:11px;color:#a0849a;line-height:1.3;text-align:center}
@@ -772,10 +799,12 @@ h1.title{
     <div class="age-badge" title="适龄提示：适合3岁以上玩家"><span class="age-num">3</span><span class="age-plus">+</span></div>
     <button class="age-action-btn" id="rulesBtn" onclick="updateRuleUI();document.getElementById('ruleModal').classList.add('show');syncBgm();return false;"><svg viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h12v16H7a2 2 0 00-2 2z" fill="currentColor" opacity=".85"/><path d="M5 18a2 2 0 012-2h12" stroke="currentColor" stroke-width="2" fill="none"/></svg>规则指引</button>
     <button class="age-action-btn" id="identityBtn" onclick="updateIdentityUI();document.getElementById('identityModal').classList.add('show');syncBgm();return false;"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".9"/><path d="M4 20c1-5 4.5-7 8-7s7 2 8 7" fill="currentColor" opacity=".6"/></svg>身份选择</button>
-    <div class="energy-mini" id="energyMini" title="体力：每关消耗5点，VIP6无限">
+    <div class="energy-mini" id="energyMini" title="体力：每关消耗5点，每10分钟恢复1点；看广告+10（每日5次）；每日首登+10；通关+5">
       <svg viewBox="0 0 24 24" class="energy-ico"><path d="M13 2L5 13h6l-1 9 9-11h-6l1-9z" fill="currentColor"/></svg>
       <div class="energy-track"><div class="energy-fill" id="energyFill"></div></div>
       <span class="energy-num" id="energyNum">100/100</span>
+      <button class="energy-plus" id="energyPlus" title="看广告+10体力（每日5次）" onclick="energyAd()">+</button>
+      <span class="energy-tip" id="energyTip"></span>
     </div>
   </div>
   <button class="backup-mini" id="backupBtn">备份</button>
@@ -888,6 +917,19 @@ h1.title{
   </div>
 </div>
 
+<!-- VIP5/6 暂时无法解锁弹窗 -->
+<div class="modal-backdrop" id="vipLockModal">
+  <div class="modal-card ad-confirm-card">
+    <div class="ad-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7a5 5 0 00-5-5z" fill="#ffd23f"/><circle cx="12" cy="15" r="1.8" fill="#fff"/><path d="M12 13.4v3.4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>
+    </div>
+    <p class="m-info" id="vipLockMsg">为了游戏的平衡，暂时无法解锁哦～</p>
+    <div class="m-btns">
+      <button class="btn btn-ok" id="vipLockOk">知道啦</button>
+    </div>
+  </div>
+</div>
+
 <!-- 形态解锁询问弹窗 -->
 <div class="modal-backdrop" id="formAskModal">
   <div class="modal-card ad-confirm-card">
@@ -940,7 +982,7 @@ h1.title{
     <div class="role-stage" id="roleStage"></div>
     <p class="m-info" id="roleName"></p>
     <div class="role-tabs">
-      <button class="role-tab on" data-tab="color">颜色</button>
+      <button class="role-tab on" data-tab="color">颜色 <b id="colorCount"></b></button>
       <button class="role-tab" data-tab="skin">皮肤 <b id="skinCount"></b></button>
       <button class="role-tab" data-tab="effect">特效 <b id="effectCount"></b></button>
       <button class="role-tab" data-tab="form">形态 <b id="formCount"></b></button>
@@ -949,9 +991,6 @@ h1.title{
     <div class="effect-grid" id="skinGrid" style="display:none"></div>
     <div class="effect-grid" id="effectGrid" style="display:none"></div>
     <div class="effect-grid" id="formGrid" style="display:none"></div>
-    <div class="role-extra">
-      <span class="role-extra-item">道具 · 敬请期待</span>
-    </div>
     <div class="m-btns"><button class="btn btn-retry" id="roleClose">返回</button></div>
   </div>
 </div>
@@ -1220,6 +1259,64 @@ function updateEnergyUI(){
   n.textContent=energy+'/100';
 }
 updateEnergyUI();
+/* ============================================================
+   体力恢复系统：时间 +1/10分钟 · 广告 +10(每日5次) · 每日首登 +10 · 通关 +5
+   ============================================================ */
+var ENERGY_MAX=100,ENERGY_MS=10*60*1000;
+var lastEnergyTs=Date.now();
+try{lastEnergyTs=parseInt(localStorage.getItem('ttx-energy-ts')||'0',10)||Date.now();}catch(e){}
+if(lastEnergyTs>Date.now())lastEnergyTs=Date.now();
+function saveEnergyTs(){try{localStorage.setItem('ttx-energy-ts',String(lastEnergyTs));}catch(e){}}
+function adEnergyRec(){
+  var rec=null;try{rec=JSON.parse(localStorage.getItem('ttx-ad-energy')||'null');}catch(e){}
+  var today=new Date().toDateString();
+  if(!rec||rec.d!==today)rec={d:today,n:0};
+  return rec;
+}
+function tickEnergy(){
+  var now=Date.now(),tip=document.getElementById('energyTip');
+  if(isInfEnergy()){
+    lastEnergyTs=now;saveEnergyTs();
+    if(tip)tip.textContent='VIP6 无限体力';
+    return;
+  }
+  var gain=Math.floor((now-lastEnergyTs)/ENERGY_MS);
+  if(gain>0){
+    lastEnergyTs+=gain*ENERGY_MS;saveEnergyTs();
+    if(energy<ENERGY_MAX){
+      energy=Math.min(ENERGY_MAX,energy+gain);
+      saveEnergy();updateEnergyUI();
+    }
+  }
+  if(tip){
+    if(energy>=ENERGY_MAX)tip.textContent='体力已满';
+    else{
+      var rem=Math.max(1,Math.ceil((lastEnergyTs+ENERGY_MS-now)/1000));
+      var mm=Math.floor(rem/60),ss=rem%60;
+      tip.textContent=(mm>0?mm+'分':'')+(ss<10?'0':'')+ss+'秒后+1';
+    }
+  }
+}
+function energyAd(){
+  if(isInfEnergy()){toast('VIP6 无限体力，不用加啦～');return;}
+  var rec=adEnergyRec();
+  if(rec.n>=5){toast('今日广告体力已加满 5 次啦～');return;}
+  showAdConfirm('看广告 <b>+10 体力</b>～<br>观看 <b>30 秒</b> 即可获得（今日还可加 <b>'+(5-rec.n)+'</b> 次）','energy',0);
+}
+function dailyEnergyBonus(){
+  var today=new Date().toDateString(),d=null;
+  try{d=localStorage.getItem('ttx-energy-daily');}catch(e){}
+  if(d===today)return;
+  try{localStorage.setItem('ttx-energy-daily',today);}catch(e){}
+  if(!isInfEnergy()){
+    energy=Math.min(ENERGY_MAX,energy+10);
+    saveEnergy();updateEnergyUI();
+    toast('每日福利：体力 +10！');
+  }
+}
+setTimeout(dailyEnergyBonus,0);
+setTimeout(tickEnergy,0);
+setInterval(tickEnergy,5000);
 function modeMoves(){return isUni()?22:30;}
 function modeTarget(lv){return isUni()?2000+(lv-1)*900:1500+(lv-1)*700;}
 function saveMode(){try{localStorage.setItem('ttx-mode',gameMode);}catch(e){}updateIdentityUI();}
@@ -1261,7 +1358,8 @@ function spectatorSVG(color){
 }
 function renderSpectator(){
   var s=document.getElementById('spInner');
-  if(s)s.innerHTML=(curForm>0?formSVGOf(curForm):spectatorSVG(roleDefOf(curRole).color));
+  if(!s)return;
+  s.innerHTML='<div class="sp-fig">'+spectatorBodyHTML()+'</div>'+(curEffect>0?'<div class="sp-fx">'+effectImgHTML(curEffect)+'</div>':'');
 }
 var spTimer=null,SP_CLASSES=['sp-match','sp-combo','sp-win','sp-happy','sp-sad'];
 function spAct(m){
@@ -1341,7 +1439,7 @@ function quizMood(m){
 }
 function renderQuizRole(){
   var qr=document.getElementById('quizRole');
-  if(qr)qr.innerHTML='<div class="sp-inner">'+spectatorSVG(roleDefOf(curRole).color)+'</div>';
+  if(qr)qr.innerHTML='<div class="sp-inner"><div class="sp-fig">'+spectatorBodyHTML()+'</div>'+(curEffect>0?'<div class="sp-fx">'+effectImgHTML(curEffect)+'</div>':'')+'</div>';
 }
 
 var level=1,moves=modeMoves(),target=modeTarget(1),score=0;
@@ -1387,7 +1485,7 @@ function roleNameOf(id){for(var i=0;i<ROLE_DEFS.length;i++)if(ROLE_DEFS[i].id===
 function roleLevelOf(id){for(var i=0;i<ROLE_DEFS.length;i++)if(ROLE_DEFS[i].id===id)return ROLE_DEFS[i].lv;return 0;}
 function roleDefOf(id){for(var i=0;i<ROLE_DEFS.length;i++){if(ROLE_DEFS[i].id===id)return ROLE_DEFS[i];}return ROLE_DEFS[0];}
 function setRole(id){if(!isRoleUnlocked(id))return;curRole=id;saveRoles();refreshRoleIcon();}
-function unlockRole(id){if(isRoleUnlocked(id))return;unlockedRoles.push(id);saveRoles();}
+function unlockRole(id){if(isRoleUnlocked(id))return;unlockedRoles.push(id);saveRoles();markNew('role',id);}
 function unlockRolesByLevel(lv){for(var i=0;i<ROLE_DEFS.length;i++){if(ROLE_DEFS[i].lv===lv)unlockRole(ROLE_DEFS[i].id);}refreshRoleIcon();}
 var _rbowN=0;
 function stickmanSVG(color){
@@ -1547,17 +1645,17 @@ function saveForms(){try{localStorage.setItem('ttx-forms',JSON.stringify(unlocke
 function isFormUnlocked(id){if(vipLv>=4)return true;return unlockedForms.indexOf(id)>=0;}
 function formNameOf(id){for(var i=0;i<FORM_DEFS.length;i++)if(FORM_DEFS[i].id===id)return FORM_DEFS[i].name;return '';}
 function formSVGOf(id){for(var i=0;i<FORM_DEFS.length;i++)if(FORM_DEFS[i].id===id)return FORM_DEFS[i].svg;return '';}
-function unlockForm(id){if(unlockedForms.indexOf(id)<0){unlockedForms.push(id);saveForms();}}
+function unlockForm(id){if(unlockedForms.indexOf(id)<0){unlockedForms.push(id);saveForms();markNew('form',id);}}
 function setForm(id){curForm=id;saveForms();refreshRoleIcon();}
 function updateFormCount(){var c=document.getElementById('formCount');if(c)c.textContent=unlockedForms.length+'/30';}
 function renderFormPanel(){
   var g=document.getElementById('formGrid');
   updateFormCount();
   if(!g)return;
-  var html='';
+  var html='<div class="effect-item'+(curForm===0?' cur':'')+'" data-fid="none"><div class="effect-img"></div><div class="effect-name">无</div>'+(curForm===0?'<div class="effect-tag">已装备</div>':'<div class="effect-tag">点击装备</div>')+'</div>';
   for(var i=1;i<=FORM_DEFS.length;i++){
     var d=FORM_DEFS[i-1],un=isFormUnlocked(d.id),isCur=d.id===curForm;
-    html+='<div class="effect-item'+(un?'':' locked')+(isCur?' cur':'')+'" data-fid="'+d.id+'">';
+    html+='<div class="effect-item'+(un?'':' locked')+(isCur?' cur':'')+(' q'+qualityOf('form',i))+'" data-fid="'+d.id+'">'+(hasNew('form',d.id)?'<span class="new-dot">NEW</span>':'');
     if(!un)html+='<svg class="effect-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#c4b6c0"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#c4b6c0" stroke-width="2.4" fill="none"/></svg>';
     html+='<div class="effect-img">'+d.svg+'</div>'
       +'<div class="effect-name">'+d.name+'</div>'
@@ -1603,32 +1701,100 @@ function isSkinUnlocked(id){if(vipLv>=3)return true;return unlockedSkins.indexOf
 function skinNameOf(id){if(id>=1&&id<=18)return SKIN_DEFS[id-1].name;return '';}
 function skinSVGOf(id){if(id>=1&&id<=18)return SKIN_DEFS[id-1].svg;return '';}
 function skinLevelOf(id){if(id>=1&&id<=18)return SKIN_DEFS[id-1].lv;return 0;}
-function unlockSkin(id){if(isSkinUnlocked(id))return;unlockedSkins.push(id);saveSkins();updateSkinCount();}
+function unlockSkin(id){if(isSkinUnlocked(id))return;unlockedSkins.push(id);saveSkins();updateSkinCount();markNew('skin',id);}
 function setSkin(id){curSkin=id;saveSkins();refreshRoleIcon();}
 function updateSkinCount(){var c=document.getElementById('skinCount');if(c)c.textContent=unlockedSkins.length+'/18';}
+function skinOnStickman(skinId,color){
+  var defs='',paint=color;
+  if(color==='RAINBOW'){
+    _rbowN++;var gid='rb'+_rbowN;
+    defs='<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0" stop-color="#ff5a6a"/><stop offset=".2" stop-color="#ff9e63"/>'
+      +'<stop offset=".4" stop-color="#ffd23f"/><stop offset=".6" stop-color="#3fca8e"/>'
+      +'<stop offset=".8" stop-color="#4aa8ff"/><stop offset="1" stop-color="#b39bff"/>'
+      +'</linearGradient></defs>';
+    paint='url(#'+gid+')';
+  }
+  _rbowN++;var cpid='hc'+_rbowN;
+  return '<svg viewBox="0 0 120 120">'+defs
+    +'<defs><clipPath id="'+cpid+'"><circle cx="60" cy="36" r="21"/></clipPath></defs>'
+    +'<g clip-path="url(#'+cpid+')"><g transform="translate(38.88,14.22) scale(0.66)">'+skinSVGOf(skinId).replace('<svg viewBox="0 0 64 64">','<svg x="0" y="0" width="64" height="64" viewBox="0 0 64 64">')+'</g></g>'
+    +'<path d="M60 57 L60 84" stroke="'+paint+'" stroke-width="7" stroke-linecap="round"/>'
+    +'<path d="M60 66 L34 82" stroke="'+paint+'" stroke-width="7" stroke-linecap="round"/>'
+    +'<path d="M60 66 L86 82" stroke="'+paint+'" stroke-width="7" stroke-linecap="round"/>'
+    +'<path d="M60 84 L45 106" stroke="'+paint+'" stroke-width="7" stroke-linecap="round"/>'
+    +'<path d="M60 84 L75 106" stroke="'+paint+'" stroke-width="7" stroke-linecap="round"/>'
+    +'</svg>';
+}
+function skinOnSpectator(skinId,color){
+  var defs='',paint=color;
+  if(color==='RAINBOW'){
+    _rbowN++;var gid='rb'+_rbowN;
+    defs='<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0" stop-color="#ff5a6a"/><stop offset=".2" stop-color="#ff9e63"/>'
+      +'<stop offset=".4" stop-color="#ffd23f"/><stop offset=".6" stop-color="#3fca8e"/>'
+      +'<stop offset=".8" stop-color="#4aa8ff"/><stop offset="1" stop-color="#b39bff"/>'
+      +'</linearGradient></defs>';
+    paint='url(#'+gid+')';
+  }
+  _rbowN++;var cpid='hc'+_rbowN;
+  return '<svg viewBox="0 0 100 80">'+defs
+    +'<defs><clipPath id="'+cpid+'"><circle cx="48" cy="22" r="13"/></clipPath></defs>'
+    +'<ellipse cx="52" cy="71" rx="36" ry="6" fill="rgba(0,0,0,.08)"/>'
+    +'<path d="M58 70 Q46 64 44 50 Q42 36 48 24" stroke="'+paint+'" stroke-width="6" fill="none" stroke-linecap="round"/>'
+    +'<path d="M46 36 Q30 32 26 42" stroke="'+paint+'" stroke-width="5" fill="none" stroke-linecap="round"/>'
+    +'<path d="M58 66 Q70 62 78 68" stroke="'+paint+'" stroke-width="6" fill="none" stroke-linecap="round"/>'
+    +'<g clip-path="url(#'+cpid+')"><g transform="translate(35.2,8.8) scale(0.4)">'+skinSVGOf(skinId).replace('<svg viewBox="0 0 64 64">','<svg x="0" y="0" width="64" height="64" viewBox="0 0 64 64">')+'</g></g>'
+    +'</svg>';
+}
+function spectatorBodyHTML(){
+  var c=roleDefOf(curRole)?roleDefOf(curRole).color:'#5a4a55';
+  if(curForm>0)return formSVGOf(curForm);
+  if(curSkin>0)return skinOnSpectator(curSkin,c);
+  return spectatorSVG(c);
+}
 function charFace(){
   if(curForm>0)return formSVGOf(curForm);
-  if(curSkin>0)return skinSVGOf(curSkin);
-  return stickmanSVG(roleDefOf(curRole).color);
+  if(curSkin>0)return skinOnStickman(curSkin,roleDefOf(curRole)?roleDefOf(curRole).color:'#5a4a55');
+  return stickmanSVG(roleDefOf(curRole)?roleDefOf(curRole).color:'#5a4a55');
 }
 function refreshRoleIcon(){
+  var fx=(curEffect>0?'<span class="mini-fx">'+effectImgHTML(curEffect)+'</span>':'');
   var ic=document.getElementById('roleIcon');
-  if(ic)ic.innerHTML=charFace();
+  if(ic)ic.innerHTML=charFace()+fx;
   var pr=document.getElementById('progressRole');
-  if(pr)pr.innerHTML=charFace();
+  if(pr)pr.innerHTML=charFace()+fx;
   renderSpectator();
 }
+function updateColorCount(){var c=document.getElementById('colorCount');if(c)c.textContent=unlockedRoles.length+'/'+ROLE_DEFS.length;}
+function updateRoleSummary(){
+  var cs=document.getElementById('rsColor'),ss=document.getElementById('rsSkin'),es=document.getElementById('rsEffect'),fs=document.getElementById('rsForm');
+  if(cs)cs.textContent=roleNameOf(curRole);
+  if(ss)ss.textContent=(curSkin>0?skinNameOf(curSkin):'原皮');
+  if(es)es.textContent=(curEffect>0?effectNameOf(curEffect):'无');
+  if(fs)fs.textContent=(curForm>0?formNameOf(curForm):'无');
+}
+function qualityOf(kind,id){
+  if(kind==='skin'){if(id<=6)return 1;if(id<=12)return 2;return 3;}
+  if(kind==='effect'){if(id<=20)return 1;if(id<=35)return 2;return 3;}
+  if(kind==='form'){if(id<=10)return 1;if(id<=20)return 2;return 3;}
+  return 1;
+}
+function markNew(kind,id){try{var arr=JSON.parse(sessionStorage.getItem('ttx-new')||'[]');if(arr.indexOf(kind+':'+id)<0){arr.push(kind+':'+id);sessionStorage.setItem('ttx-new',JSON.stringify(arr));}}catch(e){}}
+function hasNew(kind,id){try{return JSON.parse(sessionStorage.getItem('ttx-new')||'[]').indexOf(kind+':'+id)>=0;}catch(e){return false;}}
+function consumeNewKind(kind){try{var arr=JSON.parse(sessionStorage.getItem('ttx-new')||'[]');arr=arr.filter(function(x){return x.indexOf(kind+':')!==0;});sessionStorage.setItem('ttx-new',JSON.stringify(arr));}catch(e){}}
 function renderRolePanel(){
   var stage=document.getElementById('roleStage');
   if(stage)stage.innerHTML=stageHTML();
   var nm=document.getElementById('roleName');
   if(nm)nm.textContent='当前角色：'+roleNameOf(curRole)+'火柴人';
+  updateColorCount();
   var g=document.getElementById('roleGrid');
   if(!g)return;
   var html='';
   for(var i=0;i<ROLE_DEFS.length;i++){
     var d=ROLE_DEFS[i],un=isRoleUnlocked(d.id),isCur=d.id===curRole;
-    html+='<div class="role-item'+(un?'':' locked')+(isCur?' cur':'')+'" data-role="'+d.id+'">';
+    html+='<div class="role-item'+(un?'':' locked')+(isCur?' cur':'')+'" data-role="'+d.id+'">'+(hasNew('role',d.id)?'<span class="new-dot">NEW</span>':'');
     if(!un)html+='<svg class="role-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#c4b6c0"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#c4b6c0" stroke-width="2.4" fill="none"/></svg>';
     html+='<div class="role-swat">'+stickmanSVG(d.color)+'</div>'
       +'<div class="role-item-name">'+d.name+'火柴人</div>'
@@ -1700,7 +1866,7 @@ function saveEffects(){try{localStorage.setItem('ttx-effects',JSON.stringify(unl
 function isEffectUnlocked(id){return unlockedEffects.indexOf(id)>=0;}
 function effectNameOf(id){if(id>=1&&id<=50)return EFFECT_SVG[id-1].n;return '';}
 function effectImgHTML(id){if(id>=1&&id<=50)return EFFECT_SVG[id-1].s;return '';}
-function unlockEffect(id){if(isEffectUnlocked(id))return;unlockedEffects.push(id);saveEffects();updateEffectCount();}
+function unlockEffect(id){if(isEffectUnlocked(id))return;unlockedEffects.push(id);saveEffects();updateEffectCount();markNew('effect',id);}
 function unlockEffectByLevel(lv){if(lv>=1&&lv<=50)unlockEffect(lv);}
 function setEffect(id){curEffect=id;saveEffects();}
 function updateEffectCount(){var c=document.getElementById('effectCount');if(c)c.textContent=unlockedEffects.length+'/50';}
@@ -1714,12 +1880,12 @@ function renderEffectPanel(){
   updateEffectCount();
   if(!g)return;
   var html='';
-  for(var i=1;i<=50;i++){
-    var un=isEffectUnlocked(i),isCur=i===curEffect;
-    html+='<div class="effect-item'+(un?'':' locked')+(isCur?' cur':'')+'" data-eid="'+i+'">';
+  for(var i=0;i<=50;i++){
+    var un=(i===0)||isEffectUnlocked(i),isCur=i===curEffect;
+    html+='<div class="effect-item'+(un?'':' locked')+(isCur?' cur':'')+(i>0?' q'+qualityOf('effect',i):'')+'" data-eid="'+i+'">'+(hasNew('effect',i)?'<span class="new-dot">NEW</span>':'');
     if(!un)html+='<svg class="effect-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#c4b6c0"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#c4b6c0" stroke-width="2.4" fill="none"/></svg>';
-    html+='<div class="effect-img">'+effectImgHTML(i)+'</div>'
-      +'<div class="effect-name">'+effectNameOf(i)+'</div>'
+    html+='<div class="effect-img">'+(i===0?'':effectImgHTML(i))+'</div>'
+      +'<div class="effect-name">'+(i===0?'无':effectNameOf(i))+'</div>'
       +(isCur?'<div class="effect-tag">已装备</div>':(un?'<div class="effect-tag">点击装备</div>':'<div class="effect-tag">通关第 '+i+' 关解锁</div>'))
       +'</div>';
   }
@@ -1732,10 +1898,10 @@ function renderSkinPanel(){
   var html='';
   for(var i=0;i<=18;i++){
     var un=(i===0)||isSkinUnlocked(i),isCur=i===curSkin;
-    html+='<div class="effect-item'+(un?'':' locked')+(isCur?' cur':'')+'" data-sid="'+i+'">';
+    html+='<div class="effect-item'+(un?'':' locked')+(isCur?' cur':'')+(i>0?' q'+qualityOf('skin',i):'')+'" data-sid="'+i+'">'+(hasNew('skin',i)?'<span class="new-dot">NEW</span>':'');
     if(!un)html+='<svg class="effect-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#c4b6c0"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#c4b6c0" stroke-width="2.4" fill="none"/></svg>';
-    html+='<div class="effect-img">'+(i===0?stickmanSVG(roleDefOf(curRole).color):skinSVGOf(i))+'</div>'
-      +'<div class="effect-name">'+(i===0?'原皮':skinNameOf(i))+'</div>'
+    html+='<div class="effect-img skin-img">'+(i===0?stickmanSVG(roleDefOf(curRole).color):skinOnStickman(i,roleDefOf(curRole).color))+'</div>'
+      +'<div class="effect-name">'+(i===0?'无':skinNameOf(i))+'</div>'
       +(isCur?'<div class="effect-tag">已装备</div>':(un?'<div class="effect-tag">点击装备</div>':'<div class="effect-tag">点击充值解锁</div>'))
       +'</div>';
   }
@@ -2354,6 +2520,7 @@ function finishLevel(win){
     st=secs<=60?3:(secs<=120?2:1);
     if((starsByLevel[level]||0)<st){starsByLevel[level]=st;localStorage.setItem('ttx-stars',JSON.stringify(starsByLevel));}
     hintChances=Math.min(3,hintChances+1);shuffleChances=Math.min(3,shuffleChances+1);saveChances();updateChanceBtns(); unlockRolesByLevel(level);unlockEffectByLevel(level);items.rocket=Math.min(1,items.rocket+1);items.bomb=Math.min(1,items.bomb+1);items.candy=Math.min(1,items.candy+1);saveItems();updateToolBtns();
+    if(!isInfEnergy()){energy=Math.min(ENERGY_MAX,energy+5);saveEnergy();updateEnergyUI();tickEnergy();}
   }
   var stars='';
   for(var i=1;i<=3;i++)stars+='<span class="st'+(win&&i<=st?' on':'')+'"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5.4L20 8l-4.2 3.9L17 18l-5-3-5 3 1.2-6.1L4 8l5.6-.6z" fill="'+(win&&i<=st?'#ffd23f':'#e3d5dd')+'"/></svg></span>';
@@ -2581,6 +2748,17 @@ function grantAdReward(p){
   }else if(p.type==='shuffle'){
     shuffleChances=Math.min(3,shuffleChances+3);saveChances();updateChanceBtns();
     toast('获得 3 次洗牌～');
+  }else if(p.type==='energy'){
+    var _er=adEnergyRec();
+    if(_er.n<5){
+      _er.n++;try{localStorage.setItem('ttx-ad-energy',JSON.stringify(_er));}catch(e){}
+      if(!isInfEnergy()){
+        energy=Math.min(ENERGY_MAX,energy+10);
+        saveEnergy();updateEnergyUI();
+        tickEnergy();
+      }
+      toast('体力 +10！');
+    }else toast('今日广告体力已加满啦～');
   }else if(p.type==='time'){
     timeLeft+=120;
     if(moves<=0)moves=10;
@@ -2879,6 +3057,7 @@ document.getElementById('roleBtn').addEventListener('click',function(){
 document.getElementById('roleClose').addEventListener('click',function(){
   document.getElementById('roleModal').classList.remove('show');
 });
+
 document.getElementById('roleGrid').addEventListener('click',function(e){
   var it=e.target.closest?e.target.closest('.role-item'):null;
   if(!it)return;
@@ -2900,9 +3079,9 @@ function switchRoleTab(tab){
   if(eg)eg.style.display=(tab==='effect')?'grid':'none';
   if(sg)sg.style.display=(tab==='skin')?'grid':'none';
   if(fg)fg.style.display=(tab==='form')?'grid':'none';
-  if(tab==='effect')renderEffectPanel();
-  if(tab==='skin')renderSkinPanel();
-  if(tab==='form')renderFormPanel();
+  if(tab==='effect'){consumeNewKind('effect');renderEffectPanel();}
+  if(tab==='skin'){consumeNewKind('skin');renderSkinPanel();}
+  if(tab==='form'){consumeNewKind('form');renderFormPanel();}
 }
 var _tabs=document.querySelectorAll('.role-tab');
 for(var ti2=0;ti2<_tabs.length;ti2++){
@@ -2929,7 +3108,8 @@ document.getElementById('effectGrid').addEventListener('click',function(e){
   var it=e.target.closest?e.target.closest('.effect-item'):null;
   if(!it)return;
   var id=parseInt(it.getAttribute('data-eid'),10);
-  if(!id||id===curEffect)return;
+  if(isNaN(id)||id===curEffect)return;
+  if(id===0){setEffect(0);renderRolePanel();renderEffectPanel();toast('已取消特效！');return;}
   if(isEffectUnlocked(id)){setEffect(id);renderRolePanel();renderEffectPanel();toast('已装备「'+effectNameOf(id)+'」！');return;}
   openPay('effect',id);
 });
@@ -2969,7 +3149,7 @@ document.getElementById('skinGrid').addEventListener('click',function(e){
   if(!it)return;
   var id=parseInt(it.getAttribute('data-sid'),10);
   if(isNaN(id)||id===curSkin)return;
-  if(id===0){setSkin(0);renderRolePanel();renderSkinPanel();toast('已切换为原皮！');return;}
+  if(id===0){setSkin(0);renderRolePanel();renderSkinPanel();toast('已切换为无（不穿皮肤）！');return;}
   if(isSkinUnlocked(id)){setSkin(id);renderRolePanel();renderSkinPanel();toast('已装备皮肤「'+skinNameOf(id)+'」！');return;}
   openPay('skin',id);
 });
@@ -3331,14 +3511,14 @@ function cancelAd(){
 }
 document.getElementById('adCancel2').addEventListener('click',cancelAd);
 var rechargeTier=0,rechargeMethod='';
-var RECHARGE_TIERS=[{lv:1,price:'6元',tip:'跳过全部广告'},{lv:2,price:'68元',tip:'解锁角色系统'},{lv:3,price:'198元',tip:'解锁全部皮肤'},{lv:4,price:'328元',tip:'解锁全部形态'},{lv:5,price:'648元',tip:'敬请期待',coming:true},{lv:6,price:'1288元',tip:'敬请期待',coming:true}];
+var RECHARGE_TIERS=[{lv:1,price:'6元',tip:'跳过全部广告'},{lv:2,price:'68元',tip:'解锁角色系统'},{lv:3,price:'198元',tip:'解锁全部皮肤'},{lv:4,price:'328元',tip:'解锁全部形态'},{lv:5,price:'648元',tip:'关卡内无限提示机会',coming:true},{lv:6,price:'1288元',tip:'体力无限 · 每关不耗体力',coming:true}];
 function renderTiers(){
   var g=document.getElementById('vipTiers');
   if(!g)return;
   var html='';
   for(var i=1;i<=6;i++){
     var t=RECHARGE_TIERS[i-1];
-    html+='<button class="vip-tier'+(vipLv>=i?' owned':'')+(vipLv===i-1?' cur-tier':'')+(t.coming?' coming':'')+'" data-tier="'+i+'">'
+    html+='<button class="vip-tier'+(vipLv>=i?' owned':'')+(vipLv===i-1&&!t.coming?' cur-tier':'')+(t.coming?' coming':'')+'" data-tier="'+i+'">'
       +'<b>VIP'+i+'</b><span class="vt-price">'+t.price+'</span><small>'+t.tip+'</small></button>';
   }
   g.innerHTML=html;
@@ -3357,10 +3537,11 @@ function openRecharge(){
 document.getElementById('rechargeBtn').addEventListener('click',openRecharge);
 document.getElementById('rechargeClose').addEventListener('click',function(){document.getElementById('rechargeModal').classList.remove('show');syncBgm();});
 document.getElementById('rechargeCancel').addEventListener('click',function(){document.getElementById('rechargeConfirm').style.display='none';var m3=document.getElementById('rechargeMethods');if(m3)m3.style.display='flex';});
+document.getElementById('vipLockOk').addEventListener('click',function(){document.getElementById('vipLockModal').classList.remove('show');syncBgm();});
 document.getElementById('vipTiers').addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('.vip-tier'):null;if(!b)return;
   var tier=parseInt(b.getAttribute('data-tier'),10);
-  var tt=RECHARGE_TIERS[tier-1];if(tt&&tt.coming){toast('该档位暂未开放，敬请期待~');return;}
+  var tt=RECHARGE_TIERS[tier-1];if(tt&&tt.coming){var vlm=document.getElementById('vipLockMsg');if(vlm)vlm.textContent='为了游戏的平衡，暂时无法解锁哦～';document.getElementById('vipLockModal').classList.add('show');syncBgm();return;}
   if(vipLv>=tier){toast('已经是 VIP'+vipLv+' 啦～');return;}
   rechargeTier=tier;rechargeMethod='';
   var m4=document.getElementById('rechargeMsg');
@@ -3413,7 +3594,9 @@ document.getElementById('formAskCancel').addEventListener('click',function(){
 });
 document.getElementById('formGrid').addEventListener('click',function(e){
   var it=e.target.closest?e.target.closest('.effect-item'):null;if(!it)return;
-  var id=parseInt(it.getAttribute('data-fid'),10);if(!id)return;
+  var raw=it.getAttribute('data-fid');
+  if(raw==='none'){setForm(0);renderRolePanel();renderFormPanel();toast('已取消形态！');return;}
+  var id=parseInt(raw,10);if(isNaN(id))return;
   formAskId=id;
   askFormUnlock(id);
 });
