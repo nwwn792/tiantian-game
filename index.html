@@ -945,7 +945,6 @@ h1.title{
     <p class="m-info form-ask-msg" id="formAskMsg"></p>
     <div class="m-btns">
       <button class="btn btn-ok" id="formAskVip">升级VIP4</button>
-      <button class="btn btn-ok" id="formAskAd">看广告解锁</button>
       <button class="btn btn-cancel" id="formAskCancel">取消</button>
     </div>
   </div>
@@ -1060,9 +1059,6 @@ h1.title{
     <div class="pay-scan" id="rechargeScan" style="display:none">
       <div class="scan-face"><div class="scan-line"></div></div>
       <p class="scan-msg" id="rechargeScanMsg">正在扫描人脸...</p>
-    </div>
-    <div class="m-btns">
-      <button class="btn btn-cancel" id="rechargeClose">关闭</button>
     </div>
   </div>
 </div>
@@ -1261,7 +1257,7 @@ function isUni(){return gameMode==='uni';}
 var energy=100;
 try{energy=parseInt(localStorage.getItem('ttx-energy')||'100',10)||0;}catch(e){energy=100;}
 if(energy<0)energy=0;if(energy>100)energy=100;
-function isInfEnergy(){return vipLv>=6;}
+function isInfEnergy(){return hasVip(6);}
 function saveEnergy(){try{localStorage.setItem('ttx-energy',String(energy));}catch(e){}}
 function updateEnergyUI(){
   var f=document.getElementById('energyFill'),n=document.getElementById('energyNum');
@@ -1463,11 +1459,14 @@ var starsByLevel={};
 
 try{starsByLevel=JSON.parse(localStorage.getItem('ttx-stars')||'{}');}catch(e){starsByLevel={};}var unlockedExtra=1;
 
-try{unlockedExtra=Math.max(1,parseInt(localStorage.getItem('ttx-unlocked')||'1',10));}catch(e){unlockedExtra=1;}var isVip=false,vipLv=0;
-function setVipLv(n){
-  if(n>vipLv)vipLv=(n>4?4:n);
-  try{localStorage.setItem('ttx-vip-lv',String(vipLv));localStorage.setItem('ttx-vip','1');}catch(e){}
-  isVip=vipLv>=1;
+try{unlockedExtra=Math.max(1,parseInt(localStorage.getItem('ttx-unlocked')||'1',10));}catch(e){unlockedExtra=1;}var isVip=false,vipBits=0;
+function hasVip(n){return n>=1&&n<=6&&(vipBits&(1<<(n-1)))!==0;}
+function vipList(){var a=[];for(var vi=1;vi<=6;vi++)if(hasVip(vi))a.push('VIP'+vi);return a;}
+function setVipOwn(n){
+  if(n<1||n>6)return;
+  vipBits|=(1<<(n-1));
+  isVip=true;
+  try{localStorage.setItem('ttx-vips',String(vipBits));localStorage.setItem('ttx-vip','1');localStorage.removeItem('ttx-vip-lv');}catch(e){}
   updateVipUI();
   updateEnergyUI();
 }
@@ -1654,7 +1653,7 @@ var unlockedForms=[],curForm=0;
 try{unlockedForms=JSON.parse(localStorage.getItem('ttx-forms')||'[]');}catch(e){unlockedForms=[];}
 try{curForm=parseInt(localStorage.getItem('ttx-form')||'0',10)||0;}catch(e){curForm=0;}
 function saveForms(){try{localStorage.setItem('ttx-forms',JSON.stringify(unlockedForms));localStorage.setItem('ttx-form',String(curForm));}catch(e){}}
-function isFormUnlocked(id){if(vipLv>=4)return true;return unlockedForms.indexOf(id)>=0;}
+function isFormUnlocked(id){if(hasVip(4))return true;return unlockedForms.indexOf(id)>=0;}
 function formNameOf(id){for(var i=0;i<FORM_DEFS.length;i++)if(FORM_DEFS[i].id===id)return FORM_DEFS[i].name;return '';}
 function formSVGOf(id){for(var i=0;i<FORM_DEFS.length;i++)if(FORM_DEFS[i].id===id)return FORM_DEFS[i].svg;return '';}
 function unlockForm(id){if(unlockedForms.indexOf(id)<0){unlockedForms.push(id);saveForms();markNew('form',id);}}
@@ -1671,15 +1670,15 @@ function renderFormPanel(){
     if(!un)html+='<svg class="effect-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#c4b6c0"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#c4b6c0" stroke-width="2.4" fill="none"/></svg>';
     html+='<div class="effect-img">'+d.svg+'</div>'
       +'<div class="effect-name">'+d.name+'</div>'
-      +(isCur?'<div class="effect-tag">已装备</div>':(un?'<div class="effect-tag">点击装备</div>':'<div class="effect-tag">看广告解锁</div>'))
+      +(isCur?'<div class="effect-tag">已装备</div>':(un?'<div class="effect-tag">点击装备</div>':'<div class="effect-tag">VIP4解锁</div>'))
       +'</div>';
   }
   g.innerHTML=html;
 }
 function askFormUnlock(id){
   if(isFormUnlocked(id)){setForm(id);renderFormPanel();toast('已装备「'+formNameOf(id)+'」！');return;}
-  if(vipLv>=4){unlockForm(id);setForm(id);renderFormPanel();toast('VIP4 特权：已解锁并装备「'+formNameOf(id)+'」！');return;}
-  document.getElementById('formAskMsg').textContent='解锁「'+formNameOf(id)+'」需要看一段广告～升级 VIP4 可一键解锁全部宠物！';
+  if(hasVip(4)){unlockForm(id);setForm(id);renderFormPanel();toast('VIP4 特权：已解锁并装备「'+formNameOf(id)+'」！');return;}
+  document.getElementById('formAskMsg').innerHTML='解锁「'+formNameOf(id)+'」需要 <b>VIP4</b> 特权～开通 VIP4 即可一键解锁全部宠物！';
   document.getElementById('formAskModal').classList.add('show');
   syncBgm();
 }
@@ -1709,7 +1708,7 @@ try{curSkin=parseInt(localStorage.getItem('ttx-skin')||'0',10)||0;}catch(e){curS
 if(curSkin<0||curSkin>18)curSkin=0;
 unlockedSkins=unlockedSkins.filter(function(x){return x>=1&&x<=18;});
 function saveSkins(){try{localStorage.setItem('ttx-skins',JSON.stringify(unlockedSkins));}catch(e){}try{localStorage.setItem('ttx-skin',String(curSkin));}catch(e){}}
-function isSkinUnlocked(id){if(vipLv>=3)return true;return unlockedSkins.indexOf(id)>=0;}
+function isSkinUnlocked(id){if(hasVip(3))return true;return unlockedSkins.indexOf(id)>=0;}
 function skinNameOf(id){if(id>=1&&id<=18)return SKIN_DEFS[id-1].name;return '';}
 function skinSVGOf(id){if(id>=1&&id<=18)return SKIN_DEFS[id-1].svg;return '';}
 function skinLevelOf(id){if(id>=1&&id<=18)return SKIN_DEFS[id-1].lv;return 0;}
@@ -1917,9 +1916,10 @@ function renderSkinPanel(){
   }
   g.innerHTML=html;
 }
-try{vipLv=parseInt(localStorage.getItem('ttx-vip-lv')||'0',10)||0;}catch(e){vipLv=0;}
-if(vipLv<1){try{if(localStorage.getItem('ttx-vip')==='1')vipLv=1;}catch(e){}}
-isVip=vipLv>=1;if(vipLv>4)vipLv=4;updateEnergyUI();function _chk(v){
+try{vipBits=parseInt(localStorage.getItem('ttx-vips')||'0',10)||0;}catch(e){vipBits=0;}
+if(!vipBits){try{var _olv=parseInt(localStorage.getItem('ttx-vip-lv')||'0',10)||0;if(_olv>=1&&_olv<=4)vipBits=(1<<_olv)-1;}catch(e){}}
+if(!vipBits){try{if(localStorage.getItem('ttx-vip')==='1')vipBits=1;}catch(e){}}
+isVip=vipBits>0;try{localStorage.setItem('ttx-vips',String(vipBits));}catch(e){}updateEnergyUI();function _chk(v){
   var o='';
   for(var i=0;i<3;i++){o+=String.fromCharCode('678'.charCodeAt(i)-5);}
   return v===o;
@@ -1929,7 +1929,7 @@ function updateVipUI(){
   if(b){
     b.classList.toggle('vip-on',isVip);
     var t=document.getElementById('vipBtnTxt');
-    if(t)t.textContent=isVip?('VIP'+vipLv+' 已开通'):'升级 VIP';
+    if(t)t.textContent=isVip?(vipList().join(' ')+' 已开通'):'升级 VIP';
   }
   var bg=document.getElementById('vipBadge');
   if(bg)bg.classList.toggle('show',isVip);
@@ -2451,7 +2451,7 @@ function doHint(){
       if(cell&&pieceEls[cell.id])pieceEls[cell.id].classList.add('hint');
     });
     sHint();
-    if(vipLv<5){hintChances=Math.max(0,hintChances-1);saveChances();updateChanceBtns();}
+    if(!hasVip(5)){hintChances=Math.max(0,hintChances-1);saveChances();updateChanceBtns();}
     hintTimer=setTimeout(function(){clearHint();hintBusy=false;},1500);
   }catch(e){
     hintBusy=false;
@@ -2490,7 +2490,7 @@ function startTimer(from){
 }
 function saveChances(){try{localStorage.setItem('ttx-chances',JSON.stringify({h:hintChances,s:shuffleChances}));}catch(e){}}
 function updateChanceBtns(){
-  document.getElementById('hintTxt').textContent=(vipLv>=5?'∞':hintChances);
+  document.getElementById('hintTxt').textContent=(hasVip(5)?'∞':hintChances);
   document.getElementById('shuffleTxt').textContent=shuffleChances;
   document.getElementById('hintBtn').disabled=false;
   document.getElementById('shuffleBtn').disabled=false;
@@ -2658,7 +2658,7 @@ function goToLevel(n){
 }
 var AD_SECONDS=30,adLeft=AD_SECONDS,adTimer=null,adPending=null;
 function showAdConfirm(msg,type,n){
-  if(isVip){
+  if(hasVip(1)){
     grantAdReward({type:type,n:n||0});
     return;
   }
@@ -2968,7 +2968,7 @@ document.getElementById('modalShare').addEventListener('click',shareCard);
 /* ============================================================
    功能：进度备份（导出/导入）
    ============================================================ */
-var BACKUP_KEYS=['ttx-best','ttx-stars','ttx-chances','ttx-items','ttx-roles','ttx-skins','ttx-effects','ttx-vip','ttx-muted','ttx-bgm-vol','ttx-tut','ttx-mode'];
+var BACKUP_KEYS=['ttx-best','ttx-stars','ttx-chances','ttx-items','ttx-roles','ttx-skins','ttx-effects','ttx-vip','ttx-vips','ttx-muted','ttx-bgm-vol','ttx-tut','ttx-mode'];
 function backupExport(){
   var d={};
   BACKUP_KEYS.forEach(function(k){try{var v=localStorage.getItem(k);if(v!==null)d[k]=v;}catch(e){}});
@@ -3221,7 +3221,7 @@ document.getElementById('adGo').addEventListener('click',finishAd);
 document.getElementById('adLoading').addEventListener('click',adReload);
 
 document.getElementById('vipBtn').addEventListener('click',function(){
-  if(isVip){toast('您已是尊贵 VIP 啦～');return;}
+  if(isVip){openRecharge();return;}
   document.getElementById('vipCode').value='';
   document.getElementById('vipModal').classList.add('show');
   document.getElementById('vipCode').focus();
@@ -3229,8 +3229,7 @@ document.getElementById('vipBtn').addEventListener('click',function(){
 document.getElementById('vipOk').addEventListener('click',function(){
   var v=document.getElementById('vipCode').value.trim();
   if(_chk(v)){
-    isVip=true;
-    try{localStorage.setItem('ttx-vip','1');}catch(e){}
+    setVipOwn(1);
     document.getElementById('vipModal').classList.remove('show');
     updateVipUI();
     toast('恭喜！VIP 身份激活成功～');
@@ -3542,7 +3541,7 @@ function renderTiers(){
   var html='';
   for(var i=1;i<=6;i++){
     var t=RECHARGE_TIERS[i-1];
-    html+='<button class="vip-tier'+(vipLv>=i?' owned':'')+(vipLv===i-1&&!t.coming?' cur-tier':'')+(t.coming?' coming':'')+'" data-tier="'+i+'">'
+    html+='<button class="vip-tier'+(hasVip(i)?' owned':'')+(t.coming?' coming':'')+'" data-tier="'+i+'">'
       +'<b>VIP'+i+'</b><span class="vt-price">'+t.price+'</span><small>'+t.tip+'</small></button>';
   }
   g.innerHTML=html;
@@ -3551,16 +3550,15 @@ function openRecharge(){
   rechargeTier=0;rechargeMethod='';
   renderTiers();
   var rm=document.getElementById('rechargeMsg');
-  if(rm)rm.textContent='选择要升级的 VIP 档位～';
+  if(rm)rm.textContent='选择要开通的 VIP 档位～';
   var m2=document.getElementById('rechargeMethods');if(m2)m2.style.display='none';
   var c2=document.getElementById('rechargeConfirm');if(c2)c2.style.display='none';
-  var c2b=document.getElementById('rechargeCancelRow');if(c2b)c2b.style.display='none';
+  var c2b=document.getElementById('rechargeCancelRow');if(c2b)c2b.style.display='flex';
   var rs=document.getElementById('rechargeScan');if(rs)rs.style.display='none';
   document.getElementById('rechargeModal').classList.add('show');
   syncBgm();
 }
 document.getElementById('rechargeBtn').addEventListener('click',openRecharge);
-document.getElementById('rechargeClose').addEventListener('click',function(){document.getElementById('rechargeModal').classList.remove('show');syncBgm();});
 document.getElementById('rechargeCancel').addEventListener('click',function(){document.getElementById('rechargeConfirm').style.display='none';var m3=document.getElementById('rechargeMethods');if(m3)m3.style.display='flex';var c3c=document.getElementById('rechargeCancelRow');if(c3c)c3c.style.display='flex';});
 document.getElementById('rechargeCancelMethod').addEventListener('click',function(){document.getElementById('rechargeModal').classList.remove('show');syncBgm();});
 document.getElementById('vipLockOk').addEventListener('click',function(){document.getElementById('vipLockModal').classList.remove('show');syncBgm();});
@@ -3568,10 +3566,10 @@ document.getElementById('vipTiers').addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('.vip-tier'):null;if(!b)return;
   var tier=parseInt(b.getAttribute('data-tier'),10);
   var tt=RECHARGE_TIERS[tier-1];if(tt&&tt.coming){var vlm=document.getElementById('vipLockMsg');if(vlm)vlm.textContent='为了游戏的平衡，暂时无法解锁哦～';document.getElementById('vipLockModal').classList.add('show');syncBgm();return;}
-  if(vipLv>=tier){toast('已经是 VIP'+vipLv+' 啦～');return;}
+  if(hasVip(tier)){toast('VIP'+tier+' 已开通啦～');return;}
   rechargeTier=tier;rechargeMethod='';
   var m4=document.getElementById('rechargeMsg');
-  if(m4)m4.textContent='升级 VIP'+tier+'（'+RECHARGE_TIERS[tier-1].price+'）～请选择支付方式：';
+  if(m4)m4.textContent='开通 VIP'+tier+'（'+RECHARGE_TIERS[tier-1].price+'）～请选择支付方式：';
   var m5=document.getElementById('rechargeMethods');if(m5)m5.style.display='flex';
   var c3=document.getElementById('rechargeConfirm');if(c3)c3.style.display='none';
   var c3b=document.getElementById('rechargeCancelRow');if(c3b)c3b.style.display='flex';
@@ -3580,7 +3578,7 @@ document.getElementById('rechargeMethods').addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('.pay-method'):null;if(!b)return;
   rechargeMethod=b.getAttribute('data-pay');
   var cm=document.getElementById('rechargeConfirmMsg');
-  if(cm)cm.innerHTML='确认使用「<b>'+PAY_NAMES[rechargeMethod]+'</b>」升级 <b>VIP'+rechargeTier+'</b> 吗？';
+  if(cm)cm.innerHTML='确认使用「<b>'+PAY_NAMES[rechargeMethod]+'</b>」开通 <b>VIP'+rechargeTier+'</b> 吗？';
   var c4=document.getElementById('rechargeConfirm');if(c4)c4.style.display='block';
   var c4b=document.getElementById('rechargeCancelRow');if(c4b)c4b.style.display='none';
 });
@@ -3597,8 +3595,8 @@ document.getElementById('rechargeOk').addEventListener('click',function(){
     setTimeout(function(){
       document.getElementById('rechargeModal').classList.remove('show');
       var rs3=document.getElementById('rechargeScan');if(rs3)rs3.style.display='none';
-      setVipLv(rechargeTier);
-      toast('恭喜升级 VIP'+rechargeTier+'！');
+      setVipOwn(rechargeTier);
+      toast('恭喜开通 VIP'+rechargeTier+'！');
       renderRolePanel();renderSkinPanel();renderFormPanel();updateChanceBtns();
       var fa=document.getElementById('formAskModal');
       if(fa&&fa.className.indexOf('show')>=0)fa.classList.remove('show');
@@ -3609,11 +3607,6 @@ document.getElementById('rechargeOk').addEventListener('click',function(){
 document.getElementById('formAskVip').addEventListener('click',function(){
   document.getElementById('formAskModal').classList.remove('show');
   openRecharge();
-});
-document.getElementById('formAskAd').addEventListener('click',function(){
-  document.getElementById('formAskModal').classList.remove('show');
-  var id=formAskId;formAskId=0;
-  showAdConfirm('看一段广告解锁宠物「'+formNameOf(id)+'」吧～','form',id);
 });
 document.getElementById('formAskCancel').addEventListener('click',function(){
   formAskId=0;
