@@ -2873,7 +2873,6 @@ document.getElementById('restartBtn').addEventListener('click',function(){
 });
 document.getElementById('playBtn').addEventListener('click',startGame);
 document.getElementById('roleBtn').addEventListener('click',function(){
-  if(vipLv<2){toast('升级 VIP2 解锁角色系统～');openRecharge();return;}
   renderRolePanel();
   document.getElementById('roleModal').classList.add('show');
 });
