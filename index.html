@@ -452,7 +452,7 @@ h1.title{
 .energy-num{font-size:12px;font-weight:800;color:#7a4a5a;font-family:var(--font-num);min-width:30px;text-align:right}
 .energy-plus{width:18px;height:18px;border-radius:50%;border:0;background:linear-gradient(135deg,#ffd23f,#ff9e3d);color:#fff;font-size:13px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 2px 5px rgba(255,170,60,.45);flex:none;padding:0}
 .energy-plus:active{transform:scale(.9)}
-.energy-tip{font-size:9px;color:#c0859a;font-weight:700;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.energy-tip{display:block;font-size:9px;color:#c0859a;font-weight:700;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.82)}
 .age-badge{font-size:26px;line-height:1;padding:7px 11px 8px;border-radius:12px;background:linear-gradient(135deg,#7edbc0,#4fc6a8);box-shadow:0 3px 10px rgba(79,198,168,.4),inset 0 0 0 2px rgba(255,255,255,.4);color:#fff;user-select:none;-webkit-user-select:none}
 .age-num{font-size:1em;font-weight:900;font-family:var(--font-num)}
 .age-plus{font-size:.25em;font-weight:900;vertical-align:super;margin-left:1px}
@@ -502,7 +502,7 @@ h1.title{
 .rule-body .rv{margin:7px 0 2px;font-weight:800;color:#8a5a6a;font-size:14.5px}
 .rule-btn-row{display:flex;gap:8px;align-items:baseline;padding:6px 10px;border-radius:12px;background:rgba(255,224,239,.55);margin:4px 0}
 .rule-btn-row b{color:#d85a9e;font-size:13.5px;min-width:70px;text-align:right;font-family:var(--font-title)}
-.rule-btn-row span{color:#6a4a5a;font-size:13px;line-height:1.5;flex:1}
+.rule-btn-row span{color:#6a4a5a;font-size:13px;line-height:1.5;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .identity-row{display:flex;flex-direction:column;gap:10px;margin:12px 0 4px}
 .identity-card{position:relative;border:2px solid #ffe3ef;background:#fff;border-radius:18px;padding:12px 14px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:3px;transition:transform .15s,box-shadow .15s}
 .identity-card b{font-family:var(--font-title);font-size:16px;color:#6a4a5a}
@@ -597,6 +597,10 @@ h1.title{
 .modal-backdrop.show{display:flex}
 /* 锁定弹窗（VIP5/6 暂不可解锁）必须盖在充值弹窗之上 */
 #vipLockModal{z-index:80}
+#formAskModal{z-index:80}
+#adConfirm{z-index:80}
+#adModal{z-index:80}
+#vipModal{z-index:80}
 .modal-card{
   background:#fff;border-radius:28px;padding:24px 26px;width:min(88vw,340px);
   text-align:center;box-shadow:0 14px 40px rgba(107,74,94,.3);
@@ -806,8 +810,8 @@ h1.title{
       <div class="energy-track"><div class="energy-fill" id="energyFill"></div></div>
       <span class="energy-num" id="energyNum">100/100</span>
       <button class="energy-plus" id="energyPlus" title="看广告+10体力（每日5次）" onclick="energyAd()">+</button>
-      <span class="energy-tip" id="energyTip"></span>
     </div>
+    <span class="energy-tip" id="energyTip"></span>
   </div>
   <button class="backup-mini" id="backupBtn">备份</button>
   <button class="backup-mini" id="rechargeBtn">充值</button>
@@ -1010,6 +1014,9 @@ h1.title{
       <button class="pay-method" data-pay="wechat"><svg viewBox="0 0 24 24"><path d="M9 5C5.1 5 2 7.6 2 10.8c0 1.8 1 3.4 2.6 4.5L4 18l2.7-1.4c.7.2 1.5.3 2.3.3 3.9 0 7-2.6 7-5.8S12.9 5 9 5z" fill="#4ecb6a"/></svg>微信支付</button>
       <button class="pay-method" data-pay="qq"><svg viewBox="0 0 24 24"><path d="M12 2c-4 0-7 2.7-7 6.1 0 1.8.9 3.4 2.3 4.5L6.5 19c2.8-1.6 3.5-2.6 4.5-2.6S14.7 17.4 17.5 19l-1.8-6.4c1.4-1.1 2.3-2.7 2.3-4.5C19 4.7 16 2 12 2z" fill="#4aa8ff"/></svg>QQ钱包支付</button>
     </div>
+    <div class="m-btns" id="payCancelRow">
+      <button class="btn btn-cancel" id="payCancelMethod">取消</button>
+    </div>
     <div class="pay-confirm" id="payConfirm" style="display:none">
       <p class="m-info" id="payConfirmMsg"></p>
       <div class="m-btns">
@@ -1039,6 +1046,9 @@ h1.title{
       <button class="pay-method" data-pay="face"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5" fill="#ff8fc8"/><path d="M4 20c1.2-3.6 4.4-5 8-5s6.8 1.4 8 5z" fill="#ff8fc8"/></svg>颜值支付</button>
       <button class="pay-method" data-pay="wechat"><svg viewBox="0 0 24 24"><path d="M9 5C5.1 5 2 7.6 2 10.8c0 1.8 1 3.4 2.6 4.5L4 18l2.7-1.4c.7.2 1.5.3 2.3.3 3.9 0 7-2.6 7-5.8S12.9 5 9 5z" fill="#4ecb6a"/></svg>微信支付</button>
       <button class="pay-method" data-pay="qq"><svg viewBox="0 0 24 24"><path d="M12 2c-4 0-7 2.7-7 6.1 0 1.8.9 3.4 2.3 4.5L6.5 19c2.8-1.6 3.5-2.6 5.5-2.6s2.7 1 5.5 2.6L16.7 12.6C18.1 11.5 19 9.9 19 8.1 19 4.7 16 2 12 2z" fill="#4aa8ff"/></svg>QQ钱包支付</button>
+    </div>
+    <div class="m-btns" id="rechargeCancelRow" style="display:none">
+      <button class="btn btn-cancel" id="rechargeCancelMethod">取消</button>
     </div>
     <div class="pay-confirm" id="rechargeConfirm" style="display:none">
       <p class="m-info" id="rechargeConfirmMsg"></p>
@@ -2759,6 +2769,14 @@ function grantAdReward(p){
       }
       toast('体力 +10！');
     }else toast('今日广告体力已加满啦～');
+  }else if(p.type==='form'){
+    if(p.n>0){
+      unlockForm(p.n);
+      setForm(p.n);
+      saveForms();
+      renderRolePanel();renderSkinPanel();renderFormPanel();
+      toast('宠物已解锁并装备「'+formNameOf(p.n)+'」！');
+    }
   }else if(p.type==='time'){
     timeLeft+=120;
     if(moves<=0)moves=10;
@@ -3098,6 +3116,7 @@ function openPay(kind,id){
   if(pmsg){pmsg.style.display='';pmsg.innerHTML='解锁「<b>'+payNameOf(id)+'</b>」需要充值哦～<br>请选择支付方式：';}
   document.getElementById('payMethods').style.display='flex';
   document.getElementById('payConfirm').style.display='none';
+  var pcr=document.getElementById('payCancelRow');if(pcr)pcr.style.display='flex';
   var ps=document.getElementById('payScan');
   if(ps){ps.style.display='none';}
   var psm=document.getElementById('payScanMsg');
@@ -3118,6 +3137,7 @@ document.getElementById('payMethods').addEventListener('click',function(e){
   if(!b||!payTarget)return;
   payMethod=b.getAttribute('data-pay');
   document.getElementById('payMethods').style.display='none';
+  var pcr2=document.getElementById('payCancelRow');if(pcr2)pcr2.style.display='none';
   var pm4=document.getElementById('payMsg');
   if(pm4)pm4.style.display='none';
   document.getElementById('payConfirmMsg').innerHTML='确认使用「<b>'+PAY_NAMES[payMethod]+'</b>」解锁「<b>'+payNameOf(payTarget)+'</b>」吗？';
@@ -3144,6 +3164,7 @@ document.getElementById('payOk').addEventListener('click',function(){
     },700);
   },3000);
 });
+document.getElementById('payCancelMethod').addEventListener('click',function(){document.getElementById('payModal').classList.remove('show');syncBgm();});
 document.getElementById('skinGrid').addEventListener('click',function(e){
   var it=e.target.closest?e.target.closest('.effect-item'):null;
   if(!it)return;
@@ -3290,25 +3311,28 @@ document.addEventListener('DOMContentLoaded',function(){setBgmVol(bgmVol);});
     <h2>游戏规则</h2>
     <div class="rule-body">
       <p class="rv">基本玩法</p>
-      点击两个相邻的可爱图案交换位置，上下左右相邻的相同图案达到 <b>3 个及以上</b> 就会一鼓作气全部消除！消除后上方图案下落补位，还能自动连消。
+      点击两个相邻的可爱图案交换位置，上下左右相邻的相同图案达到 <b>3 个及以上</b> 就会一鼓作气全部消除！消除后上方图案下落补位，还能自动连消；连消越多，蛋小黄会蹦出来夸你哦！
       <p class="rv">过关目标</p>
-      在 <b>3 分钟</b> 内达到目标分数即可过关：1 分钟内 3 颗星，2 分钟内 2 颗星，3 分钟内 1 颗星。
-      <p class="rv">道具</p>
-      火箭消除一整行、炸弹炸掉周围 3×3、彩虹糖让同种图案变身，每人初始各 1 个。
+      共 <b>50 关</b>，包含分数关、收集关（蝴蝶结 / 西瓜 / 香蕉 / 草莓 / 苹果）、破冰关等类型。每关限时 <b>3 分钟</b>：1 分钟内过关 3 颗星、2 分钟内 2 颗星、3 分钟内 1 颗星，并记录该关最高分。
+      <p class="rv">道具与机会</p>
+      火箭消除一整行、炸弹炸掉周围 3×3、彩虹糖让同种图案变身，每人初始各 1 个。提示与洗牌：初始各 2 次，通关各 +1，最多存 3 次，看广告可 +3 次。
       <p class="rv">身份模式</p>
-      <b>小朋友</b>：原版难度，有道具、有新手引导。<br>
-      <b>大学生</b>：困难模式——不能使用道具、没有新手引导、步数更少、目标分数更高，每通关 3 关要答一道计算机选择题，答对奖励额外步数！
+      <b>小朋友</b>：原版难度，6 种可爱图案，有道具、有新手引导。<br>
+      <b>大学生</b>：困难模式——8 种图案、不能使用道具、没有新手引导、步数更少、目标更高，每通关 3 关答一道计算机选择题，答对奖励额外步数！<br>
+      修改身份需答对一道随机题，切换后有 5 分钟冷却。
       <div id="ruleBtns">
         <p class="rv">主页按钮</p>
-        <div class="rule-btn-row"><b>适龄提示</b><span>适合 3 岁以上玩家</span></div>
-        <div class="rule-btn-row"><b>规则指引</b><span>查看玩法规则与按钮介绍</span></div>
-        <div class="rule-btn-row"><b>身份选择</b><span>切换小朋友 / 大学生模式</span></div>
-        <div class="rule-btn-row"><b>开始游戏</b><span>从当前关卡开始挑战</span></div>
-        <div class="rule-btn-row"><b>我的角色</b><span>选择角色颜色、皮肤与特效</span></div>
-        <div class="rule-btn-row"><b>选择关卡</b><span>自由挑选想玩的关卡</span></div>
-        <div class="rule-btn-row"><b>升级VIP</b><span>激活 VIP 特权，解锁关卡更轻松</span></div>
-        <div class="rule-btn-row"><b>音量</b><span>调节背景音乐音量</span></div>
-        <div class="rule-btn-row"><b>备份</b><span>备份或恢复游戏进度</span></div>
+        <div class="rule-btn-row"><b>适龄提示</b><span title="适合 3 岁以上玩家">适合 3 岁以上玩家</span></div>
+        <div class="rule-btn-row"><b>规则指引</b><span title="查看玩法规则与按钮介绍">查看玩法规则与按钮介绍</span></div>
+        <div class="rule-btn-row"><b>身份选择</b><span title="切换小朋友 / 大学生（答题验证+冷却）">切换小朋友 / 大学生（答题验证+冷却）</span></div>
+        <div class="rule-btn-row"><b>体力条</b><span title="每关消耗 5 点，10 分钟恢复 1 点，看广告 +10">每关消耗 5 点，10 分钟恢复 1 点，看广告 +10</span></div>
+        <div class="rule-btn-row"><b>开始游戏</b><span title="从当前关卡开始挑战">从当前关卡开始挑战</span></div>
+        <div class="rule-btn-row"><b>我的角色</b><span title="选择颜色、皮肤、特效与宠物">选择颜色、皮肤、特效与宠物</span></div>
+        <div class="rule-btn-row"><b>选择关卡</b><span title="自由挑选想玩的关卡">自由挑选想玩的关卡</span></div>
+        <div class="rule-btn-row"><b>升级VIP</b><span title="激活 VIP 特权，跳过广告、解锁皮肤宠物">激活 VIP 特权，跳过广告、解锁皮肤宠物</span></div>
+        <div class="rule-btn-row"><b>充值</b><span title="升级 VIP1-6 档位，解锁更多特权">升级 VIP1-6 档位，解锁更多特权</span></div>
+        <div class="rule-btn-row"><b>音量</b><span title="调节背景音乐音量（0-100）">调节背景音乐音量（0-100）</span></div>
+        <div class="rule-btn-row"><b>备份</b><span title="备份或恢复游戏进度">备份或恢复游戏进度</span></div>
       </div>
     </div>
     <div class="m-btns"><button class="btn btn-retry" id="ruleClose">知道啦</button></div>
@@ -3530,13 +3554,15 @@ function openRecharge(){
   if(rm)rm.textContent='选择要升级的 VIP 档位～';
   var m2=document.getElementById('rechargeMethods');if(m2)m2.style.display='none';
   var c2=document.getElementById('rechargeConfirm');if(c2)c2.style.display='none';
+  var c2b=document.getElementById('rechargeCancelRow');if(c2b)c2b.style.display='none';
   var rs=document.getElementById('rechargeScan');if(rs)rs.style.display='none';
   document.getElementById('rechargeModal').classList.add('show');
   syncBgm();
 }
 document.getElementById('rechargeBtn').addEventListener('click',openRecharge);
 document.getElementById('rechargeClose').addEventListener('click',function(){document.getElementById('rechargeModal').classList.remove('show');syncBgm();});
-document.getElementById('rechargeCancel').addEventListener('click',function(){document.getElementById('rechargeConfirm').style.display='none';var m3=document.getElementById('rechargeMethods');if(m3)m3.style.display='flex';});
+document.getElementById('rechargeCancel').addEventListener('click',function(){document.getElementById('rechargeConfirm').style.display='none';var m3=document.getElementById('rechargeMethods');if(m3)m3.style.display='flex';var c3c=document.getElementById('rechargeCancelRow');if(c3c)c3c.style.display='flex';});
+document.getElementById('rechargeCancelMethod').addEventListener('click',function(){document.getElementById('rechargeModal').classList.remove('show');syncBgm();});
 document.getElementById('vipLockOk').addEventListener('click',function(){document.getElementById('vipLockModal').classList.remove('show');syncBgm();});
 document.getElementById('vipTiers').addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('.vip-tier'):null;if(!b)return;
@@ -3548,6 +3574,7 @@ document.getElementById('vipTiers').addEventListener('click',function(e){
   if(m4)m4.textContent='升级 VIP'+tier+'（'+RECHARGE_TIERS[tier-1].price+'）～请选择支付方式：';
   var m5=document.getElementById('rechargeMethods');if(m5)m5.style.display='flex';
   var c3=document.getElementById('rechargeConfirm');if(c3)c3.style.display='none';
+  var c3b=document.getElementById('rechargeCancelRow');if(c3b)c3b.style.display='flex';
 });
 document.getElementById('rechargeMethods').addEventListener('click',function(e){
   var b=e.target.closest?e.target.closest('.pay-method'):null;if(!b)return;
@@ -3555,6 +3582,7 @@ document.getElementById('rechargeMethods').addEventListener('click',function(e){
   var cm=document.getElementById('rechargeConfirmMsg');
   if(cm)cm.innerHTML='确认使用「<b>'+PAY_NAMES[rechargeMethod]+'</b>」升级 <b>VIP'+rechargeTier+'</b> 吗？';
   var c4=document.getElementById('rechargeConfirm');if(c4)c4.style.display='block';
+  var c4b=document.getElementById('rechargeCancelRow');if(c4b)c4b.style.display='none';
 });
 document.getElementById('rechargeOk').addEventListener('click',function(){
   if(!rechargeTier||!rechargeMethod)return;
