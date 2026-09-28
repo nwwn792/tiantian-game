@@ -355,6 +355,8 @@ h1.title{
 .fx-badge{position:absolute;right:-8px;bottom:-8px;width:66px;height:72px;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(255,107,169,.4),0 0 0 3px #fff;background:#fff}
 .fx-badge img{width:100%;height:100%;object-fit:cover;display:block}
 .fx-badge svg{width:100%;height:100%;display:block}
+.pet-badge{position:absolute;left:-8px;bottom:-8px;width:66px;height:72px;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(255,107,169,.4),0 0 0 3px #fff;background:#fff;animation:fxFloat 2.4s ease-in-out infinite}
+.pet-badge svg{width:100%;height:100%;display:block}
 .pay-card{width:min(90vw,360px)}
 .pay-coin{margin:0 auto 6px;width:62px;height:62px}
 .pay-coin svg{width:62px;height:62px}
@@ -985,7 +987,7 @@ h1.title{
       <button class="role-tab on" data-tab="color">颜色 <b id="colorCount"></b></button>
       <button class="role-tab" data-tab="skin">皮肤 <b id="skinCount"></b></button>
       <button class="role-tab" data-tab="effect">特效 <b id="effectCount"></b></button>
-      <button class="role-tab" data-tab="form">形态 <b id="formCount"></b></button>
+      <button class="role-tab" data-tab="form">宠物 <b id="formCount"></b></button>
     </div>
     <div class="role-grid" id="roleGrid"></div>
     <div class="effect-grid" id="skinGrid" style="display:none"></div>
@@ -1667,7 +1669,7 @@ function renderFormPanel(){
 function askFormUnlock(id){
   if(isFormUnlocked(id)){setForm(id);renderFormPanel();toast('已装备「'+formNameOf(id)+'」！');return;}
   if(vipLv>=4){unlockForm(id);setForm(id);renderFormPanel();toast('VIP4 特权：已解锁并装备「'+formNameOf(id)+'」！');return;}
-  document.getElementById('formAskMsg').textContent='解锁「'+formNameOf(id)+'」需要看一段广告～升级 VIP4 可一键解锁全部形态！';
+  document.getElementById('formAskMsg').textContent='解锁「'+formNameOf(id)+'」需要看一段广告～升级 VIP4 可一键解锁全部宠物！';
   document.getElementById('formAskModal').classList.add('show');
   syncBgm();
 }
@@ -1749,12 +1751,10 @@ function skinOnSpectator(skinId,color){
 }
 function spectatorBodyHTML(){
   var c=roleDefOf(curRole)?roleDefOf(curRole).color:'#5a4a55';
-  if(curForm>0)return formSVGOf(curForm);
   if(curSkin>0)return skinOnSpectator(curSkin,c);
   return spectatorSVG(c);
 }
 function charFace(){
-  if(curForm>0)return formSVGOf(curForm);
   if(curSkin>0)return skinOnStickman(curSkin,roleDefOf(curRole)?roleDefOf(curRole).color:'#5a4a55');
   return stickmanSVG(roleDefOf(curRole)?roleDefOf(curRole).color:'#5a4a55');
 }
@@ -1763,7 +1763,7 @@ function refreshRoleIcon(){
   var ic=document.getElementById('roleIcon');
   if(ic)ic.innerHTML=charFace()+fx;
   var pr=document.getElementById('progressRole');
-  if(pr)pr.innerHTML=charFace()+fx;
+  if(pr)pr.innerHTML=(curForm>0?formSVGOf(curForm):charFace())+fx;
   renderSpectator();
 }
 function updateColorCount(){var c=document.getElementById('colorCount');if(c)c.textContent=unlockedRoles.length+'/'+ROLE_DEFS.length;}
@@ -1871,7 +1871,7 @@ function unlockEffectByLevel(lv){if(lv>=1&&lv<=50)unlockEffect(lv);}
 function setEffect(id){curEffect=id;saveEffects();}
 function updateEffectCount(){var c=document.getElementById('effectCount');if(c)c.textContent=unlockedEffects.length+'/50';}
 function stageHTML(){
-  var html='<div class="role-fig">'+charFace()+'</div>';
+  var html=(curForm>0?'<div class="pet-badge">'+formSVGOf(curForm)+'</div>':'')+'<div class="role-fig">'+charFace()+'</div>';
   if(curEffect>0)html+='<div class="fx-badge">'+effectImgHTML(curEffect)+'</div>';
   return html;
 }
@@ -3511,7 +3511,7 @@ function cancelAd(){
 }
 document.getElementById('adCancel2').addEventListener('click',cancelAd);
 var rechargeTier=0,rechargeMethod='';
-var RECHARGE_TIERS=[{lv:1,price:'6元',tip:'跳过全部广告'},{lv:2,price:'68元',tip:'解锁角色系统'},{lv:3,price:'198元',tip:'解锁全部皮肤'},{lv:4,price:'328元',tip:'解锁全部形态'},{lv:5,price:'648元',tip:'关卡内无限提示机会',coming:true},{lv:6,price:'1288元',tip:'体力无限 · 每关不耗体力',coming:true}];
+var RECHARGE_TIERS=[{lv:1,price:'6元',tip:'跳过全部广告'},{lv:2,price:'68元',tip:'解锁角色系统'},{lv:3,price:'198元',tip:'解锁全部皮肤'},{lv:4,price:'328元',tip:'解锁全部宠物'},{lv:5,price:'648元',tip:'关卡内无限提示机会',coming:true},{lv:6,price:'1288元',tip:'体力无限 · 每关不耗体力',coming:true}];
 function renderTiers(){
   var g=document.getElementById('vipTiers');
   if(!g)return;
@@ -3585,7 +3585,7 @@ document.getElementById('formAskVip').addEventListener('click',function(){
 document.getElementById('formAskAd').addEventListener('click',function(){
   document.getElementById('formAskModal').classList.remove('show');
   var id=formAskId;formAskId=0;
-  showAdConfirm('看一段广告解锁形态「'+formNameOf(id)+'」吧～','form',id);
+  showAdConfirm('看一段广告解锁宠物「'+formNameOf(id)+'」吧～','form',id);
 });
 document.getElementById('formAskCancel').addEventListener('click',function(){
   formAskId=0;
@@ -3595,7 +3595,7 @@ document.getElementById('formAskCancel').addEventListener('click',function(){
 document.getElementById('formGrid').addEventListener('click',function(e){
   var it=e.target.closest?e.target.closest('.effect-item'):null;if(!it)return;
   var raw=it.getAttribute('data-fid');
-  if(raw==='none'){setForm(0);renderRolePanel();renderFormPanel();toast('已取消形态！');return;}
+  if(raw==='none'){setForm(0);renderRolePanel();renderFormPanel();toast('已取消宠物！');return;}
   var id=parseInt(raw,10);if(isNaN(id))return;
   formAskId=id;
   askFormUnlock(id);
